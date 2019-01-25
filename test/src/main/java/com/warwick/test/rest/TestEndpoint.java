@@ -14,12 +14,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
 
 import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
@@ -37,7 +34,7 @@ public class TestEndpoint {
 
 	// Convert a Base64 string and create a file
 	private String convertFile(String dataBase64) throws IOException {
-		byte[] bytes = Base64.getDecoder().decode(dataBase64);
+		byte[] bytes = Base64.getMimeDecoder().decode(dataBase64);
 		String uuid = UUID.randomUUID().toString();
 		File file = new File(FILES_PATH + File.separator + uuid);
 
@@ -56,18 +53,36 @@ public class TestEndpoint {
 		return Response.ok("Hello from Thorntail!").build();
 	}
 
+	/**
+	 * header sample { Content-Type=[image/png], Content-Disposition=[form-data;
+	 * name="file"; filename="filename.extension"] }
+	 **/
+	// get uploaded filename, is there a easy way in RESTEasy?
+	private String getFileName(MultivaluedMap<String, String> header) {
+
+		String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
+
+		for (String filename : contentDisposition) {
+			if ((filename.trim().startsWith("filename"))) {
+
+				String[] name = filename.split("=");
+
+				String finalFileName = name[1].trim().replaceAll("\"", "");
+				return finalFileName;
+			}
+		}
+		return "unknown";
+	}
+
 	@POST
-	@Path("/upload-b64")
+	@Path("/upload-base64")
 	@ApiOperation(value = "Upload Base64 file", notes = "Returns the time as a string", response = Response.class)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response processCSVFileBase64(SerializedFile file, @Context UriInfo uriInfo) throws IOException {
-		String id = convertFile(file.getFileContent());
-		// String fileName = json.getString("file_name");
-		// String mimeType = json.getString("mime_type");
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response processCSVFileBase64(SerializedFile file) throws IOException {
+		String id = convertFile(file.getBase64());
 
-		UriBuilder builder = uriInfo.getAbsolutePathBuilder();
-		builder.path(id);
-		return Response.created(builder.build()).build();
+		return Response.ok().entity("{\"message\": \"success\", \"code\": 200}").build();
 	}
 
 	@POST
@@ -78,65 +93,40 @@ public class TestEndpoint {
 	public Response uploadFile(MultipartFormDataInput input) {
 
 		String fileName = "";
-		
+
 		Map<String, List<InputPart>> uploadForm = input.getFormDataMap();
 		List<InputPart> inputParts = uploadForm.get("file");
 
 		for (InputPart inputPart : inputParts) {
 
-		 try {
+			try {
 
-			MultivaluedMap<String, String> header = inputPart.getHeaders();
-			fileName = getFileName(header);
+				MultivaluedMap<String, String> header = inputPart.getHeaders();
+				fileName = getFileName(header);
 
-			//convert the uploaded file to inputstream
-			InputStream inputStream = inputPart.getBody(InputStream.class,null);
+				// convert the uploaded file to inputstream
+				InputStream inputStream = inputPart.getBody(InputStream.class, null);
 
-			byte [] bytes = IOUtils.toByteArray(inputStream);
-				
-			//constructs upload file path
-			fileName = FILES_PATH + fileName;
-				
-			writeFile(bytes,fileName);
-				
-			System.out.println("Done");
+				byte[] bytes = IOUtils.toByteArray(inputStream);
 
-		  } catch (IOException e) {
-			e.printStackTrace();
-		  }
+				// constructs upload file path
+				fileName = FILES_PATH + fileName;
 
-		}
+				writeFile(bytes, fileName);
 
-		return Response.status(200)
-		    .entity("{\"message\": \"success\", \"status\": 200}").build();
+				System.out.println("Done");
 
-	}
-
-	/**
-	 * header sample
-	 * {
-	 * 	Content-Type=[image/png], 
-	 * 	Content-Disposition=[form-data; name="file"; filename="filename.extension"]
-	 * }
-	 **/
-	//get uploaded filename, is there a easy way in RESTEasy?
-	private String getFileName(MultivaluedMap<String, String> header) {
-
-		String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
-		
-		for (String filename : contentDisposition) {
-			if ((filename.trim().startsWith("filename"))) {
-
-				String[] name = filename.split("=");
-				
-				String finalFileName = name[1].trim().replaceAll("\"", "");
-				return finalFileName;
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+
 		}
-		return "unknown";
+
+		return Response.ok().entity("{\"message\": \"success\", \"code\": 200}").build();
+
 	}
 
-	//save to somewhere
+	// save to somewhere
 	private void writeFile(byte[] content, String filename) throws IOException {
 
 		File file = new File(filename);
@@ -151,5 +141,5 @@ public class TestEndpoint {
 		fop.flush();
 		fop.close();
 
-	}	
+	}
 }

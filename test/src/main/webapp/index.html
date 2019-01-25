@@ -11,6 +11,13 @@
             <h2>Upload Document</h2>
             <table class="table table-bordered">
                 <tr>
+                	<td>
+					  <input type="file" ng-model="fileBase64Model" name="fileBase64" accept=".csv" maxsize="5000" required base-sixty-four-input>
+					  <span ng-show="form.fileBase64Model.$error.maxsize">Files must not exceed 5000 KB</span>
+                      <button ng-click="uploadBase64()">Upload Bas64 File</button></td>
+					<td>					 
+                </tr>
+                <tr>
 					<td><input type="file" class="custom-file-input" file-model="file" name="file"></td>
                 </tr>
                 <tr>
@@ -22,14 +29,14 @@
 		        <table class="table table-bordered">
 			<thead>
     			<tr>
-    				<th>File Name</th>
-    				<th>Action</th>
+    				<th>Code</th>
+    				<th>Message</th>
     			</tr>
 			</thead>
 			<tbody>
 				<tr ng-repeat="doc in docList">
-					<td><a href="/doc/{{doc.id}}">{{doc.docName}}</a></td>
-					<td><a href="/doc/{{doc.id}}" target="_blank">Download</a></td>
+					<td>{{docList.code}}</td>
+					<td>{{docList.message}}</td>
 				</tr>
 			</tbody>		
 		</table>
@@ -39,6 +46,7 @@
     <script src="lib/plugin/jquery-2.2.1.min.js"></script>
 	<script src="lib/plugin/bootstrap.min.js"></script>
 	<script src="lib/plugin/angular.min.js"></script>
+    <script src="lib/plugin/angular-base64-upload.min.js"></script>
 	<script src="documentService.js"></script>
 	<script src="app.js"></script>
 </body>

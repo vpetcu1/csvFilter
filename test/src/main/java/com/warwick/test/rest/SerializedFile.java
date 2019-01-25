@@ -5,37 +5,69 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class SerializedFile {
 
-	private String fileName;
-	private String fileContent;
+	private String base64;
+	private String filename;
+	private int filesize;
+	private String filetype;
 
 	/**
-	 * @return the fileContent
+	 * @return the base64
 	 */
-	public String getFileContent() {
-		return this.fileContent;
+	public String getBase64() {
+		return this.base64;
 	}
 
 	/**
-	 * @return the fileName
+	 * @return the filename
 	 */
-	public String getFileName() {
-		return this.fileName;
+	public String getFilename() {
+		return this.filename;
 	}
 
 	/**
-	 * @param fileContent
-	 *            the fileContent to set
+	 * @return the filesize
 	 */
-	public void setFileContent(String fileContent) {
-		this.fileContent = fileContent;
+	public int getFilesize() {
+		return this.filesize;
 	}
 
 	/**
-	 * @param fileName
-	 *            the fileName to set
+	 * @return the filetype
 	 */
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
+	public String getFiletype() {
+		return this.filetype;
+	}
+
+	/**
+	 * @param base64
+	 *            the base64 to set
+	 */
+	public void setBase64(String base64) {
+		this.base64 = base64;
+	}
+
+	/**
+	 * @param filename
+	 *            the filename to set
+	 */
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+	/**
+	 * @param filesize
+	 *            the filesize to set
+	 */
+	public void setFilesize(int filesize) {
+		this.filesize = filesize;
+	}
+
+	/**
+	 * @param filetype
+	 *            the filetype to set
+	 */
+	public void setFiletype(String filetype) {
+		this.filetype = filetype;
 	}
 
 }
