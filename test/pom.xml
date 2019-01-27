@@ -51,11 +51,11 @@
 
 	<dependencies>
 
-	    <dependency>
-	      <groupId>io.thorntail</groupId>
-	      <artifactId>jsonp</artifactId>
-	    </dependency>
-    	<dependency>
+		<dependency>
+			<groupId>io.thorntail</groupId>
+			<artifactId>jsonp</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>io.thorntail</groupId>
 			<artifactId>undertow</artifactId>
 		</dependency>
@@ -72,13 +72,27 @@
 			<artifactId>swagger-webapp</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>io.thorntail</groupId>
-		    <artifactId>jaxrs-multipart</artifactId>
+			<groupId>io.thorntail</groupId>
+			<artifactId>jaxrs-multipart</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>commons-io</groupId>
-		    <artifactId>commons-io</artifactId>
-		    <version>2.5</version>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.5</version>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>4.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.thorntail</groupId>
+			<artifactId>jaxrs-jsonb</artifactId>
+		</dependency>
+<!-- 		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-json-binding-provider</artifactId>
+			<scope>test</scope>
+		</dependency>
+ -->	</dependencies>
 </project>

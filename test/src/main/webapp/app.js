@@ -1,46 +1,32 @@
-App.controller('docController', [
+App.controller('fileController', [
 		'$scope',
 		'$rootScope',
-		'docService',
+		'cvsFilterService',
 		'$http',
-		function($scope, $rootScope, docService, $http) {
-
-			$scope.fileB64 = '';
+		function($scope, $rootScope, cvsFilterService, $http) {
 
 			$scope.uploadBase64 = function() {
-				docService.saveDocBase64($scope.fileBase64Model).then(
+				cvsFilterService.saveFileBase64($scope.fileBase64Model).then(
 						function(response) {
-							alert("File in base64 uploaded successfully.");
-							$rootScope.docList = response;
-//							$http.get("DOC_URL").success(
-//									function(response) {
-//										$rootScope.docList = response;
-//									});
+							$rootScope.rowList = response;
 						}, function(errResponse) {
-
+							$rootScope.rowList = errResponse;
 						});
 			}
-
-			$scope.file = '';
-
+			
 			$scope.upload = function() {
 				var file = $scope.file;
-				docService.saveDoc(file).then(
+				cvsFilterService.saveFileMultipart(file).then(
 						function(response) {
-							alert("File uploaded successfully.");
-							$rootScope.docList = response;
-//							$http.get("http://localhost:8080/doc/").success(
-//									function(response) {
-//										$rootScope.docList = response;
-//									});
+							$rootScope.rowList = response;
 						}, function(errResponse) {
-
+							$rootScope.rowList = errResponse;
 						});
 			}
 		} ]);
 
 App.constant('urls', {
-	DOC_URL : 'http://localhost:8080/api/test/'
+	CVS_FILTER_URL : 'http://localhost:8080/api/cvs-filter/'
 });
 
 App.directive('fileModel', [ '$parse', function($parse) {
@@ -59,8 +45,3 @@ App.directive('fileModel', [ '$parse', function($parse) {
 	};
 } ]);
 
-App.run(function($rootScope, $http) {
-//	$http.get("http://localhost:8080/doc/").success(function(response) {
-//		$rootScope.docList = response;
-//	});
-});

@@ -1,8 +1,7 @@
-package com.warwick.test.rest;
+package com.warwick.test.pojo;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
 public class SerializedFile {
 
 	private String base64;

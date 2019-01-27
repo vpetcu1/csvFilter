@@ -1,0 +1,68 @@
+<html ng-app="uploadApp">
+<head>
+<meta charset="utf8" />
+<title>CVS Filter</title>
+<link rel="stylesheet" href="styles/bootstrap.min.css">
+</head>
+<body ng-controller="fileController">
+	<div class="container">
+		<div class="col-md-6">
+			<div class="row">
+				<h2>Upload CSV Document</h2>
+				<table class="table table-bordered">
+					<tr>
+						<td>
+							<input type="file" ng-model="fileBase64Model"
+							name="fileBase64" accept=".csv" maxsize="5000" required
+							base-sixty-four-input>
+						  <span ng-show="">Files must not exceed 5000 KB</span>
+						</td>
+						<td>
+							<button ng-click="uploadBase64()">Upload File Base64</button>
+						</td>
+					</tr>
+					<tr>
+						<td><input type="file" class="custom-file-input"
+							file-model="file" accept=".csv" name="file"></td>
+						<td><button ng-click="upload()">Upload File Multipart</button></td>
+					</tr>
+				</table>
+			</div>
+			<div class="row" ng-show="rowList.header.errors.length">
+				<h2>Errors Filtering</h2>
+				<table class="table table-bordered">
+					<tr ng-repeat="error in rowList.header.errors">
+						<td>{{error.errorCode}}</td>
+						<td>{{error.message}}</td>
+					</tr>
+				</table>
+			</div>
+			<div class="row"  ng-show="rowList.result.length">
+				<h2>CSV Document Filtered</h2>
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>Id</th>
+							<th>Var</th>
+							<th>Decision</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="row in rowList.result">
+							<td>{{row.id}}</td>
+							<td>{{row.var}}</td>
+							<td>{{row.decision}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script src="lib/plugin/jquery-2.2.1.min.js"></script>
+	<script src="lib/plugin/bootstrap.min.js"></script>
+	<script src="lib/plugin/angular.min.js"></script>
+	<script src="lib/plugin/angular-base64-upload.min.js"></script>
+	<script src="csvFilterService.js"></script>
+	<script src="app.js"></script>
+</body>
+</html>
