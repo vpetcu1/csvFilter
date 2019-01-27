@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.warwick</groupId>
-	<artifactId>test</artifactId>
+	<artifactId>csvFilter</artifactId>
 	<name>Test done with Thorntail</name>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
@@ -89,10 +89,5 @@
 			<groupId>io.thorntail</groupId>
 			<artifactId>jaxrs-jsonb</artifactId>
 		</dependency>
-<!-- 		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-json-binding-provider</artifactId>
-			<scope>test</scope>
-		</dependency>
- -->	</dependencies>
+	</dependencies>
 </project>
