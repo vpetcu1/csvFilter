@@ -1,10 +1,23 @@
-package com.warwick.test.pojo;
+package com.warwick.csv.filter.request;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class SerializedFile {
 
+	@NotNull(message="base64 must not be null")
 	private String base64;
+	@NotNull(message="filename must not be null")
 	private String filename;
+	@Max(22000)
+	@Min(1)
 	private int filesize;
+	@NotNull(message="filetype must not be null")
+	@Pattern(regexp = "application/vnd.ms-excel", flags = Pattern.Flag.CASE_INSENSITIVE)
 	private String filetype;
 
 	/**
@@ -39,32 +52,36 @@ public class SerializedFile {
 	 * @param base64
 	 *            the base64 to set
 	 */
-	public void setBase64(String base64) {
+	public SerializedFile setBase64(String base64) {
 		this.base64 = base64;
+		return this;
 	}
 
 	/**
 	 * @param filename
 	 *            the filename to set
 	 */
-	public void setFilename(String filename) {
+	public SerializedFile setFilename(String filename) {
 		this.filename = filename;
+		return this;
 	}
 
 	/**
 	 * @param filesize
 	 *            the filesize to set
 	 */
-	public void setFilesize(int filesize) {
+	public SerializedFile setFilesize(int filesize) {
 		this.filesize = filesize;
+		return this;
 	}
 
 	/**
 	 * @param filetype
 	 *            the filetype to set
 	 */
-	public void setFiletype(String filetype) {
+	public SerializedFile setFiletype(String filetype) {
 		this.filetype = filetype;
+		return this;
 	}
 
 }

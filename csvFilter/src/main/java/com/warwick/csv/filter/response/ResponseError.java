@@ -1,4 +1,4 @@
-package com.warwick.test.pojo;
+package com.warwick.csv.filter.response;
 
 public class ResponseError {
 	

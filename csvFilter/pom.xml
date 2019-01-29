@@ -15,7 +15,13 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<version.resteasy>3.0.14.Final</version.resteasy>
+		<version.commons-io>2.5</version.commons-io>
+		<version.opencsv>4.0</version.opencsv>
+		<version.org.jboss.arquillian.drone>2.0.1.Final</version.org.jboss.arquillian.drone>
+		<version.org.arquillian.graphene>2.1.0.Final</version.org.arquillian.graphene>
+		<version.fest-assert-core>2.0M5</version.fest-assert-core>
+		<httpclient.version>4.5</httpclient.version>
+		<version.resteasy>3.6.2.Final</version.resteasy>
 	</properties>
 
 	<dependencyManagement>
@@ -32,7 +38,7 @@
 
 
 	<build>
-		<finalName>test</finalName>
+		<finalName>csvFilter</finalName>
 		<plugins>
 			<plugin>
 				<groupId>io.thorntail</groupId>
@@ -45,7 +51,13 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+<!--  			        <configuration>
+			            <debugPort>9000</debugPort>
+			            <properties>
+			                <swarm.debug.port>9000</swarm.debug.port>
+			            </properties>
+			        </configuration>
+ -->         	</plugin>
 		</plugins>
 	</build>
 
@@ -53,15 +65,11 @@
 
 		<dependency>
 			<groupId>io.thorntail</groupId>
-			<artifactId>jsonp</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>io.thorntail</groupId>
 			<artifactId>undertow</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.thorntail</groupId>
-			<artifactId>swagger</artifactId>
+		    <groupId>io.thorntail</groupId>
+		    <artifactId>microprofile-openapi</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.thorntail</groupId>
@@ -76,18 +84,51 @@
 			<artifactId>jaxrs-multipart</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>io.thorntail</groupId>
+			<artifactId>jaxrs-jsonb</artifactId>
+		</dependency>
+		<dependency>
+		    <groupId>io.thorntail</groupId>
+		    <artifactId>jaxrs-validator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.thorntail</groupId>
+			<artifactId>bean-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.thorntail</groupId>
+			<artifactId>thorntail-runner</artifactId>
+			<version>${version.thorntail}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.thorntail</groupId>
+			<artifactId>jaxrs-client-api</artifactId>
+			<version>${version.thorntail}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.thorntail</groupId>
+			<artifactId>arquillian</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.5</version>
+			<version>${version.commons-io}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
-			<version>4.0</version>
+			<version>${version.opencsv}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.thorntail</groupId>
-			<artifactId>jaxrs-jsonb</artifactId>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jackson-provider</artifactId>
+			<version>2.3.2.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${httpclient.version}</version>
 		</dependency>
 	</dependencies>
 </project>

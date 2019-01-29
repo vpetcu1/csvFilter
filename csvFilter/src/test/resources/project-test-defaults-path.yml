@@ -1,0 +1,5 @@
+swarm:
+  deployment:
+    csvFilter.war:
+      jaxrs:
+        application-path: /

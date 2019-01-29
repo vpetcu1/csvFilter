@@ -1,8 +1,13 @@
-package com.warwick.test.pojo;
+package com.warwick.csv.filter.response;
 
 import java.util.List;
 
-public class TestResponse {
+import javax.xml.bind.annotation.XmlRootElement;
+
+import com.warwick.csv.filter.request.CSVLine;
+
+@XmlRootElement
+public class FilterResponse {
 
 	private ResponseHeader header;
 	private List<CSVLine> result;

@@ -43,14 +43,16 @@
 					<thead>
 						<tr>
 							<th>Id</th>
-							<th>Var</th>
+							<th ng-repeat="column in rowList.result[0].vars">Var{{rowList.result[0].vars.indexOf(column)+1}}</th>
 							<th>Decision</th>
 						</tr>
 					</thead>
 					<tbody>
 						<tr ng-repeat="row in rowList.result">
 							<td>{{row.id}}</td>
-							<td>{{row.var}}</td>
+							<td ng-repeat="var in row.vars">
+								{{var}}
+							</td>
 							<td>{{row.decision}}</td>
 						</tr>
 					</tbody>

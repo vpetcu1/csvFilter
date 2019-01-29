@@ -26,7 +26,7 @@ App.controller('fileController', [
 		} ]);
 
 App.constant('urls', {
-	CVS_FILTER_URL : 'http://localhost:8080/api/cvs-filter/'
+	CVS_FILTER_URL : 'http://localhost:8080/api/csv-filter/'
 });
 
 App.directive('fileModel', [ '$parse', function($parse) {
