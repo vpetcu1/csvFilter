@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -24,14 +25,6 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
-import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.eclipse.microprofile.openapi.annotations.media.Content;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameters;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
-import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 
@@ -42,9 +35,33 @@ import com.warwick.csv.filter.response.FilterResponse;
 import com.warwick.csv.filter.response.ResponseError;
 import com.warwick.csv.filter.response.ResponseHeader;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.Contact;
+import io.swagger.annotations.Example;
+import io.swagger.annotations.ExampleProperty;
+import io.swagger.annotations.Info;
+import io.swagger.annotations.SwaggerDefinition;
+
 @Path("/csv-filter")
-@Produces(MediaType.APPLICATION_JSON)
-@Tag(name = "CSV Filtering Service", description = "Gets a csv file, applies a filter a devolves the records")
+@Api(protocols = "http", value = "/csv-filter", description = "Get filtered Results of the uploaded file", tags = "csv-filter")
+@SwaggerDefinition (
+info = @Info (
+        title = "CSV Filter Example Service",
+        description = "A simple example here",
+        version = "1.0.0-SNAPSHOT",
+        contact = @Contact (
+            name = "Vasilica Petcu",
+            email = "vpetcu1@gmail.com"
+        )
+    ),
+    host = "localhost",
+    basePath = "/api/",
+    schemes = {SwaggerDefinition.Scheme.HTTP}
+)
 public class CSVFilterEndpoint {
 
 	final static String FILES_PATH = System.getProperty("java.io.tmpdir");
@@ -54,14 +71,20 @@ public class CSVFilterEndpoint {
 	@Path("/upload-base64")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Operation(description = "Returns a a filtered list of records for a base64 input file")
-	@APIResponses({
-        @APIResponse(content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = FilterResponse.class))),
-        @APIResponse(responseCode = "400", description = "Bad Request, input invalid"),
-        @APIResponse(responseCode = "500", description = "Internal Server Error")
-    })
-	public Response processCSVFileBase64(@Valid  @Parameter(description = "Serialized Base64 file", required = true) SerializedFile file) throws IOException {
+	@ApiOperation(value = "Upload Base64 file", notes = "Returns filtered lines", response = Response.class )
+	@ApiResponses(value = {
+			   @ApiResponse(code = 200, message = "Success, Returning filtered lines"),
+			   @ApiResponse(code = 400, message = "Bad Request"),
+			   @ApiResponse(code = 500, message = "Internal Server Error") })
+	public Response processCSVFileBase64(@Valid @ApiParam(value = "test", 
+            examples = @Example(value = { 
+                    @ExampleProperty(mediaType="application/json", value="{\n" + 
+                    		"  \"base64\": \"SWQsVmFyMSxEZWNpc2lvbg0KMSwxMCwwDQoyLDIwLDENCjMsMzAsMA0KNCw0MCwxDQo1LDUwLDANCg==\",\n" + 
+                    		"  \"filename\": \"exampleA_input.csv\",\n" + 
+                    		"  \"filesize\": 58,\n" + 
+                    		"  \"filetype\": \"application/vnd.ms-excel\"\n" + 
+                    		"}") 
+            })) SerializedFile file) throws IOException {
 		String fileName = saveFile(file.getBase64(), file.getFilename());
 		FilterResponse filterResponse = processCSVFile(fileName);
 		return Response.ok().entity(filterResponse).build();
@@ -71,14 +94,12 @@ public class CSVFilterEndpoint {
 	@Path("/upload")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Operation(description = "Returns a a filtered list of records for a multipart input file")
-	@APIResponses({
-        @APIResponse(content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = FilterResponse.class))),
-        @APIResponse(responseCode = "400", description = "Bad Request, input invalid"),
-        @APIResponse(responseCode = "500", description = "Internal Server Error")
-    })
-	public Response processCSVFile(@Parameter(description = "Multipartform with File", required = true) MultipartFormDataInput input) throws IOException {
+	@ApiOperation(value = "Upload Multipart file", notes = "Returns filtered lines", response = Response.class )
+	@ApiResponses(value = {
+			   @ApiResponse(code = 200, message = "Success, Returning filtered lines"),
+			   @ApiResponse(code = 400, message = "Bad Request"),
+			   @ApiResponse(code = 500, message = "Internal Server Error") })
+	public Response processCSVFile(@NotNull MultipartFormDataInput input) throws IOException {
 		String fileName = saveFile(input);
 		FilterResponse filterResponse = processCSVFile(fileName);
 		return Response.ok().entity(filterResponse).build();
@@ -219,19 +240,13 @@ public class CSVFilterEndpoint {
 		}
 
 		List<CSVLine> output = lines
-				.stream().peek(s -> System.out.println("s.id:" + s.id)).filter(
-						p -> (p.decision == 1 || (IntStream.range(0, summaries.size())
-								.filter(j -> p.vars.get(j) >= summaries.get(j).getMin()
-										&& p.vars.get(j) <= summaries.get(j).getMax() ? true : false)
-								.count() > 0)))
-				.peek(s -> {
-					System.out.print("filtered:" + s.id);
-					for (int i = 0; i < s.vars.size(); i++) {
-						System.out.println(s.vars.get(i));
-					}
-				}).collect(Collectors.toList());
-		System.out.println(output.size());
-		System.out.println(output);
+				.stream().filter(
+						p -> (p.decision == 1 || (
+								IntStream.range(0, summaries.size())
+								.filter(j -> p.vars.get(j) >= summaries.get(j).getMin() && p.vars.get(j) <= summaries.get(j).getMax() ? true : false)
+								.count() > 0)
+						)
+				).collect(Collectors.toList());
 		return output;
 	}
 

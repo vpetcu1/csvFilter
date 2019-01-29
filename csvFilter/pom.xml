@@ -68,8 +68,8 @@
 			<artifactId>undertow</artifactId>
 		</dependency>
 		<dependency>
-		    <groupId>io.thorntail</groupId>
-		    <artifactId>microprofile-openapi</artifactId>
+			<groupId>io.thorntail</groupId>
+			<artifactId>swagger</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>io.thorntail</groupId>

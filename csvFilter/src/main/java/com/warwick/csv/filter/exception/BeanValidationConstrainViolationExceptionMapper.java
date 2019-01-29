@@ -23,7 +23,6 @@ import com.warwick.csv.filter.response.ResponseHeader;
 public class BeanValidationConstrainViolationExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
 	@Override
 	public Response toResponse(ConstraintViolationException e) {
-		System.out.println("BeanValConstrainViolationExceptionMapper in action");
 		List<ResponseError> errors = new ArrayList<ResponseError>();
 		ResponseHeader responseHeader = new ResponseHeader();
 		FilterResponse filterResponse = new FilterResponse();

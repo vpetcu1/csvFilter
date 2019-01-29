@@ -6,17 +6,18 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement
+
+@XmlRootElement(name="serializedFile")
 public class SerializedFile {
 
-	@NotNull(message="base64 must not be null")
+	@NotNull(message = "base64 must not be null")
 	private String base64;
-	@NotNull(message="filename must not be null")
+	@NotNull(message = "filename must not be null")
 	private String filename;
 	@Max(22000)
 	@Min(1)
 	private int filesize;
-	@NotNull(message="filetype must not be null")
+	@NotNull(message = "filetype must not be null")
 	@Pattern(regexp = "application/vnd.ms-excel", flags = Pattern.Flag.CASE_INSENSITIVE)
 	private String filetype;
 
